@@ -5,7 +5,7 @@ website:
   title: "ISSS624"
   navbar:
     left: 
-      - text: Hands-on Exerc  ises
+      - text: Hands-on Exercises
         menu: 
           - text: Hands-on Ecercise 1
             href: Hands-on_Ex1.qmd

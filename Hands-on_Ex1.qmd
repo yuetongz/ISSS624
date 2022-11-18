@@ -5,10 +5,6 @@ editor: visual
 
 # 1  Geospatial Data Wrangling with R
 
-PUBLISHED
-
-November 18, 2022
-
 ```{r}
 packages = c('sf','tidyverse')
 

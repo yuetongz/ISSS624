@@ -12,7 +12,7 @@ Getting Started
 The code chunk below will install an load tidyverse and sf packages.
 
 ```{r}
-pacman::p_load(sf,tidyverse)
+pacman::p_load(sf,tidyverse,spdep)
 ```
 
 Importing Geospatial Data
@@ -22,11 +22,12 @@ Importing polygon features
 This code chunk will import ESRI shapefile into R.
 
 ```{r}
-mpsz <- st_read(dsn = "data/geospatial", 
-                layer = "MP14_SUBZONE_WEB_PL")
+hunan_sf <- st_read(dsn = "data/geospatial", 
+                layer = "Hunan")
 ```
 
+Importing attribute data in csv
+
 ```{r}
-preschool = st_read("data/geospatial/pre-schools-location-kml.kml") %>%
-  st_transform(crs = 3414)
+hunan <- read_csv("data/aspatial/Hunan_2012.csv")
 ```

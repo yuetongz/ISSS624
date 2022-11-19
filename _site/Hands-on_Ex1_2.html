@@ -195,7 +195,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#choropleth-mapping-geospatial-data-using-tmap" id="toc-choropleth-mapping-geospatial-data-using-tmap" class="nav-link" data-scroll-target="#choropleth-mapping-geospatial-data-using-tmap">2.4 Choropleth Mapping Geospatial Data Using <em>tmap</em></a>
   <ul class="collapse">
   <li><a href="#plotting-a-choropleth-map-quickly-by-using-qtm" id="toc-plotting-a-choropleth-map-quickly-by-using-qtm" class="nav-link" data-scroll-target="#plotting-a-choropleth-map-quickly-by-using-qtm">2.4.1 Plotting a choropleth map quickly by using <em>qtm()</em></a></li>
-  <li><a href="#creating-a-choropleth-map-by-using-tmaps-elements" id="toc-creating-a-choropleth-map-by-using-tmaps-elements" class="nav-link" data-scroll-target="#creating-a-choropleth-map-by-using-tmaps-elements">2.4.2 Creating a choropleth map by using <em>tmap</em>'s elements</a></li>
+  <li><a href="#creating-a-choropleth-map-by-using-tmaps-elements" id="toc-creating-a-choropleth-map-by-using-tmaps-elements" class="nav-link" data-scroll-target="#creating-a-choropleth-map-by-using-tmaps-elements">2.4.2 Creating a choropleth map by using <em>tmap</em>’s elements</a></li>
   <li><a href="#data-classification-methods-of-tmap" id="toc-data-classification-methods-of-tmap" class="nav-link" data-scroll-target="#data-classification-methods-of-tmap">2.4.3 Data classification methods of <strong>tmap</strong></a></li>
   <li><a href="#colour-scheme" id="toc-colour-scheme" class="nav-link" data-scroll-target="#colour-scheme">2.4.4 Colour Scheme</a></li>
   <li><a href="#map-layouts" id="toc-map-layouts" class="nav-link" data-scroll-target="#map-layouts">2.4.5 Map Layouts</a></li>
@@ -268,7 +268,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Two data set will be used to create the choropleth map. They are:</p>
 <ul>
 <li><p>Master Plan 2014 Subzone Boundary (Web) (i.e.&nbsp;<code>MP14_SUBZONE_WEB_PL</code>) in ESRI shapefile format. It can be downloaded at <a href="https://data.gov.sg/">data.gov.sg</a> This is a geospatial data. It consists of the geographical boundary of Singapore at the planning subzone level. The data is based on URA Master Plan 2014.</p></li>
-<li><p>Singapore Residents by Planning Area / Subzone, Age Group, Sex and Type of Dwelling, June 2011-2020 in csv format (i.e.&nbsp;<code>respopagesextod2011to2020.csv</code>). This is an aspatial data fie. It can be downloaded at <a href="https://www.singstat.gov.sg/">Department of Statistics, Singapore</a> Although it does not contain any coordinates values, but it's PA and SZ fields can be used as unique identifiers to geocode to <code>MP14_SUBZONE_WEB_PL</code> shapefile.</p></li>
+<li><p>Singapore Residents by Planning Area / Subzone, Age Group, Sex and Type of Dwelling, June 2011-2020 in csv format (i.e.&nbsp;<code>respopagesextod2011to2020.csv</code>). This is an aspatial data fie. It can be downloaded at <a href="https://www.singstat.gov.sg/">Department of Statistics, Singapore</a> Although it does not contain any coordinates values, but it’s PA and SZ fields can be used as unique identifiers to geocode to <code>MP14_SUBZONE_WEB_PL</code> shapefile.</p></li>
 </ul>
 </section>
 <section id="importing-geospatial-data-into-r" class="level3">
@@ -450,16 +450,15 @@ dbl (2): Pop, Time
 <p><img src="Hands-on_Ex1_2_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p><img src="https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid"></p>
 <p>Things to learn from the code chunk above:</p>
 <ul>
-<li><p><em>tmap_mode()</em> with "plot" option is used to produce a static map. For interactive mode, "view" option should be used.</p></li>
+<li><p><em>tmap_mode()</em> with “plot” option is used to produce a static map. For interactive mode, “view” option should be used.</p></li>
 <li><p><em>fill</em> argument is used to map the attribute (i.e.&nbsp;DEPENDENCY)</p></li>
 </ul>
 </section>
 <section id="creating-a-choropleth-map-by-using-tmaps-elements" class="level3">
-<h3 class="anchored" data-anchor-id="creating-a-choropleth-map-by-using-tmaps-elements">2.4.2 Creating a choropleth map by using <em>tmap</em>'s elements</h3>
-<p>Despite its usefulness of drawing a choropleth map quickly and easily, the disadvantge of <em>qtm()</em> is that it makes aesthetics of individual layers harder to control. To draw a high quality cartographic choropleth map as shown in the figure below, <strong>tmap</strong>'s drawing elements should be used.</p>
+<h3 class="anchored" data-anchor-id="creating-a-choropleth-map-by-using-tmaps-elements">2.4.2 Creating a choropleth map by using <em>tmap</em>’s elements</h3>
+<p>Despite its usefulness of drawing a choropleth map quickly and easily, the disadvantge of <em>qtm()</em> is that it makes aesthetics of individual layers harder to control. To draw a high quality cartographic choropleth map as shown in the figure below, <strong>tmap</strong>’s drawing elements should be used.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(mpsz_pop2020)<span class="sc">+</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"DEPENDENCY"</span>, </span>
@@ -482,7 +481,6 @@ dbl (2): Pop, Time
 <p><img src="Hands-on_Ex1_2_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p><img src="https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid"></p>
 <p>In the following sub-section, we will share with you tmap functions that used to plot these elements.</p>
 <section id="drawing-a-base-map" class="level4">
 <h4 class="anchored" data-anchor-id="drawing-a-base-map">2.4.2.1 Drawing a base map</h4>
@@ -494,7 +492,6 @@ dbl (2): Pop, Time
 <p><img src="Hands-on_Ex1_2_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p><img src="https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid"></p>
 </section>
 <section id="drawing-a-choropleth-map-using-tm_polygons" class="level4">
 <h4 class="anchored" data-anchor-id="drawing-a-choropleth-map-using-tm_polygons">2.4.2.2 Drawing a choropleth map using <em>tm_polygons()</em></h4>
@@ -505,10 +502,9 @@ dbl (2): Pop, Time
 <p><img src="Hands-on_Ex1_2_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p><img src="https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid"></p>
 <p>Things to learn from <em>tm_polygons()</em>:</p>
 <ul>
-<li><p>The default interval binning used to draw the choropleth map is called "pretty". A detailed discussion of the data classification methods supported by <strong>tmap</strong> will be provided in sub-section 4.3.</p></li>
+<li><p>The default interval binning used to draw the choropleth map is called “pretty”. A detailed discussion of the data classification methods supported by <strong>tmap</strong> will be provided in sub-section 4.3.</p></li>
 <li><p>The default colour scheme used is <code>YlOrRd</code> of ColorBrewer. You will learn more about the color scheme in sub-section 4.4.</p></li>
 <li><p>By default, Missing value will be shaded in grey.</p></li>
 </ul>
@@ -524,7 +520,6 @@ dbl (2): Pop, Time
 <p><img src="Hands-on_Ex1_2_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p><img src="https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid"></p>
 <p>Notice that the planning subzones are shared according to the respective dependecy values</p>
 <p>To add the boundary of the planning subzones, tm_borders will be used as shown in the code chunk below.</p>
 <div class="cell">
@@ -535,14 +530,13 @@ dbl (2): Pop, Time
 <p><img src="Hands-on_Ex1_2_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p><img src="https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid"></p>
 <p>Notice that light-gray border lines have been added on the choropleth map.</p>
 <p>The <em>alpha</em> argument is used to define transparency number between 0 (totally transparent) and 1 (not transparent). By default, the alpha value of the col is used (normally 1).</p>
 <p>Beside <em>alpha</em> argument, there are three other arguments for <em>tm_borders()</em>, they are:</p>
 <ul>
 <li><p><em>col</em> = border colour,</p></li>
 <li><p><em>lwd</em> = border line width. The default is 1, and</p></li>
-<li><p><em>lty</em> = border line type. The default is "solid".</p></li>
+<li><p><em>lty</em> = border line type. The default is “solid”.</p></li>
 </ul>
 </section>
 </section>
@@ -564,7 +558,6 @@ dbl (2): Pop, Time
 <p><img src="Hands-on_Ex1_2_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p><img src="https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid"></p>
 <p>In the code chunk below, <em>equal</em> data classification method is used.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(mpsz_pop2020)<span class="sc">+</span></span>
@@ -576,7 +569,6 @@ dbl (2): Pop, Time
 <p><img src="Hands-on_Ex1_2_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p><img src="https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid"></p>
 <p>Notice that the distribution of quantile data classification method are more evenly distributed then equal data classification method.</p>
 <blockquote class="blockquote">
 <p><strong>Warning: Maps Lie!</strong></p>
@@ -649,7 +641,6 @@ dbl (2): Pop, Time
 <p><img src="Hands-on_Ex1_2_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p><img src="https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid"></p>
 </section>
 </section>
 <section id="colour-scheme" class="level3">
@@ -669,9 +660,8 @@ dbl (2): Pop, Time
 <p><img src="Hands-on_Ex1_2_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p><img src="https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid"></p>
 <p>Notice that the choropleth map is shaded in green.</p>
-<p>To reverse the colour shading, add a "-" prefix.</p>
+<p>To reverse the colour shading, add a “-” prefix.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(mpsz_pop2020)<span class="sc">+</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="st">"DEPENDENCY"</span>,</span>
@@ -736,7 +726,6 @@ dbl (2): Pop, Time
 <p><img src="Hands-on_Ex1_2_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p><img src="https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid"></p>
 </section>
 <section id="cartographic-furniture" class="level4">
 <h4 class="anchored" data-anchor-id="cartographic-furniture">2.4.5.3 Cartographic Furniture</h4>
@@ -764,7 +753,6 @@ dbl (2): Pop, Time
 <p><img src="Hands-on_Ex1_2_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p><img src="https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid"></p>
 <p>To reset the default style, refer to the code chunk below.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_style</span>(<span class="st">"white"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -807,7 +795,6 @@ dbl (2): Pop, Time
 <p><img src="Hands-on_Ex1_2_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p><img src="https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid"></p>
 <p>In this example, small multiple choropleth maps are created by assigning multiple values to at least one of the aesthetic arguments</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(mpsz_pop2020)<span class="sc">+</span> </span>
@@ -819,7 +806,6 @@ dbl (2): Pop, Time
 <p><img src="Hands-on_Ex1_2_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p><img src="https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid"></p>
 </section>
 <section id="by-defining-a-group-by-variable-in-tm_facets" class="level4">
 <h4 class="anchored" data-anchor-id="by-defining-a-group-by-variable-in-tm_facets">2.4.6.2 By defining a group-by variable in <em>tm_facets()</em></h4>
@@ -845,7 +831,6 @@ therefore deprecated</code></pre>
 <p><img src="Hands-on_Ex1_2_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p><img src="https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid"></p>
 </section>
 <section id="by-creating-multiple-stand-alone-maps-with-tmap_arrange" class="level4">
 <h4 class="anchored" data-anchor-id="by-creating-multiple-stand-alone-maps-with-tmap_arrange">2.4.6.3 By creating multiple stand-alone maps with <em>tmap_arrange()</em></h4>
@@ -895,7 +880,6 @@ Please use legend.outside.size to control the width of the outside legend</code>
 <p><img src="Hands-on_Ex1_2_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p><img src="https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid"></p>
 </section>
 </section>
 <section id="reference" class="level2">
@@ -924,7 +908,7 @@ Please use legend.outside.size to control the width of the outside legend</code>
 <ul>
 <li><p><a href="https://dplyr.tidyverse.org/">dplyr</a></p></li>
 <li><p><a href="https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html">Tidy data</a></p></li>
-<li><p><a href="https://cran.r-project.org/web/packages/tidyr/tidyr.pdf">tidyr: Easily Tidy Data with 'spread()' and 'gather()' Functions</a></p></li>
+<li><p><a href="https://cran.r-project.org/web/packages/tidyr/tidyr.pdf">tidyr: Easily Tidy Data with ‘spread()’ and ‘gather()’ Functions</a></p></li>
 </ul>
 
 

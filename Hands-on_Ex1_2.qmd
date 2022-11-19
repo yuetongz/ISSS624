@@ -49,7 +49,7 @@ Two data set will be used to create the choropleth map. They are:
 
 -   Master Plan 2014 Subzone Boundary (Web) (i.e. `MP14_SUBZONE_WEB_PL`) in ESRI shapefile format. It can be downloaded at [data.gov.sg](https://data.gov.sg/) This is a geospatial data. It consists of the geographical boundary of Singapore at the planning subzone level. The data is based on URA Master Plan 2014.
 
--   Singapore Residents by Planning Area / Subzone, Age Group, Sex and Type of Dwelling, June 2011-2020 in csv format (i.e. `respopagesextod2011to2020.csv`). This is an aspatial data fie. It can be downloaded at [Department of Statistics, Singapore](https://www.singstat.gov.sg/) Although it does not contain any coordinates values, but it\'s PA and SZ fields can be used as unique identifiers to geocode to `MP14_SUBZONE_WEB_PL` shapefile.
+-   Singapore Residents by Planning Area / Subzone, Age Group, Sex and Type of Dwelling, June 2011-2020 in csv format (i.e. `respopagesextod2011to2020.csv`). This is an aspatial data fie. It can be downloaded at [Department of Statistics, Singapore](https://www.singstat.gov.sg/) Although it does not contain any coordinates values, but it's PA and SZ fields can be used as unique identifiers to geocode to `MP14_SUBZONE_WEB_PL` shapefile.
 
 ### 2.3.2 Importing Geospatial Data into R
 
@@ -167,17 +167,15 @@ qtm(mpsz_pop2020,
     fill = "DEPENDENCY")
 ```
 
-![](https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-9-1.png)
-
 Things to learn from the code chunk above:
 
--   *tmap_mode()* with \"plot\" option is used to produce a static map. For interactive mode, \"view\" option should be used.
+-   *tmap_mode()* with "plot" option is used to produce a static map. For interactive mode, "view" option should be used.
 
 -   *fill* argument is used to map the attribute (i.e. DEPENDENCY)
 
-### 2.4.2 Creating a choropleth map by using *tmap*\'s elements
+### 2.4.2 Creating a choropleth map by using *tmap*'s elements
 
-Despite its usefulness of drawing a choropleth map quickly and easily, the disadvantge of *qtm()* is that it makes aesthetics of individual layers harder to control. To draw a high quality cartographic choropleth map as shown in the figure below, **tmap**\'s drawing elements should be used.
+Despite its usefulness of drawing a choropleth map quickly and easily, the disadvantge of *qtm()* is that it makes aesthetics of individual layers harder to control. To draw a high quality cartographic choropleth map as shown in the figure below, **tmap**'s drawing elements should be used.
 
 ```{r}
 tm_shape(mpsz_pop2020)+
@@ -199,8 +197,6 @@ tm_shape(mpsz_pop2020)+
              position = c("left", "bottom"))
 ```
 
-![](https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-10-1.png)
-
 In the following sub-section, we will share with you tmap functions that used to plot these elements.
 
 #### 2.4.2.1 Drawing a base map
@@ -213,8 +209,6 @@ In the code chunk below, *tm_shape()* is used to define the input data (i.e *mps
 tm_shape(mpsz_pop2020) + tm_polygons()
 ```
 
-![](https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-11-1.png)
-
 #### 2.4.2.2 Drawing a choropleth map using *tm_polygons()*
 
 To draw a choropleth map showing the geographical distribution of a selected variable by planning subzone, we just need to assign the target variable such as *Dependency* to *tm_polygons()*.
@@ -223,11 +217,9 @@ To draw a choropleth map showing the geographical distribution of a selected var
 tm_shape(mpsz_pop2020)+ tm_polygons("DEPENDENCY")
 ```
 
-![](https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-12-1.png)
-
 Things to learn from *tm_polygons()*:
 
--   The default interval binning used to draw the choropleth map is called \"pretty\". A detailed discussion of the data classification methods supported by **tmap** will be provided in sub-section 4.3.
+-   The default interval binning used to draw the choropleth map is called "pretty". A detailed discussion of the data classification methods supported by **tmap** will be provided in sub-section 4.3.
 
 -   The default colour scheme used is `YlOrRd` of ColorBrewer. You will learn more about the color scheme in sub-section 4.4.
 
@@ -244,8 +236,6 @@ tm_shape(mpsz_pop2020)+
   tm_fill("DEPENDENCY")
 ```
 
-![](https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-13-1.png)
-
 Notice that the planning subzones are shared according to the respective dependecy values
 
 To add the boundary of the planning subzones, tm_borders will be used as shown in the code chunk below.
@@ -255,8 +245,6 @@ tm_shape(mpsz_pop2020)+
   tm_fill("DEPENDENCY") +
   tm_borders(lwd = 0.1,  alpha = 1)
 ```
-
-![](https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-14-1.png)
 
 Notice that light-gray border lines have been added on the choropleth map.
 
@@ -268,7 +256,7 @@ Beside *alpha* argument, there are three other arguments for *tm_borders()*, the
 
 -   *lwd* = border line width. The default is 1, and
 
--   *lty* = border line type. The default is \"solid\".
+-   *lty* = border line type. The default is "solid".
 
 ### 2.4.3 Data classification methods of **tmap**
 
@@ -290,8 +278,6 @@ tm_shape(mpsz_pop2020)+
   tm_borders(alpha = 0.5)
 ```
 
-![](https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-15-1.png)
-
 In the code chunk below, *equal* data classification method is used.
 
 ```{r}
@@ -301,8 +287,6 @@ tm_shape(mpsz_pop2020)+
           style = "equal") +
   tm_borders(alpha = 0.5)
 ```
-
-![](https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-16-1.png)
 
 Notice that the distribution of quantile data classification method are more evenly distributed then equal data classification method.
 
@@ -361,8 +345,6 @@ tm_shape(mpsz_pop2020)+
   tm_borders(alpha = 0.5)
 ```
 
-![](https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-18-1.png)
-
 ### 2.4.4 Colour Scheme
 
 **tmap** supports colour ramps either defined by the user or a set of predefined colour ramps from the **RColorBrewer** package.
@@ -380,11 +362,9 @@ tm_shape(mpsz_pop2020)+
   tm_borders(alpha = 0.5)
 ```
 
-![](https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-19-1.png)
-
 Notice that the choropleth map is shaded in green.
 
-To reverse the colour shading, add a \"-\" prefix.
+To reverse the colour shading, add a "-" prefix.
 
 ```{r}
 tm_shape(mpsz_pop2020)+
@@ -442,8 +422,6 @@ tm_shape(mpsz_pop2020)+
   tmap_style("classic")
 ```
 
-![](https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-22-1.png)
-
 #### 2.4.5.3 Cartographic Furniture
 
 Beside map style, **tmap** also also provides arguments to draw other map furniture such as compass, scale bar and grid lines.
@@ -469,8 +447,6 @@ tm_shape(mpsz_pop2020)+
   tm_credits("Source: Planning Sub-zone boundary from Urban Redevelopment Authorithy (URA)\n and Population data from Department of Statistics DOS", 
              position = c("left", "bottom"))
 ```
-
-![](https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-23-1.png)
 
 To reset the default style, refer to the code chunk below.
 
@@ -504,8 +480,6 @@ tm_shape(mpsz_pop2020)+
   tmap_style("white")
 ```
 
-![](https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-25-1.png)
-
 In this example, small multiple choropleth maps are created by assigning multiple values to at least one of the aesthetic arguments
 
 ```{r}
@@ -515,8 +489,6 @@ tm_shape(mpsz_pop2020)+
           palette = list("Blues","Greens")) +
   tm_layout(legend.position = c("right", "bottom"))
 ```
-
-![](https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-26-1.png)
 
 #### 2.4.6.2 By defining a group-by variable in *tm_facets()*
 
@@ -536,8 +508,6 @@ tm_shape(mpsz_pop2020) +
             title.size = 20) +
   tm_borders(alpha = 0.5)
 ```
-
-![](https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-27-1.png)
 
 #### 2.4.6.3 By creating multiple stand-alone maps with *tmap_arrange()*
 
@@ -579,8 +549,6 @@ tm_shape(mpsz_pop2020[mpsz_pop2020$REGION_N=="CENTRAL REGION", ])+
   tm_borders(alpha = 0.5)
 ```
 
-![](https://r4gdsa.netlify.app/chap02_files/figure-html/unnamed-chunk-29-1.png)
-
 ## 2.5 Reference
 
 ### 2.5.1 All about **tmap** package
@@ -611,4 +579,4 @@ tm_shape(mpsz_pop2020[mpsz_pop2020$REGION_N=="CENTRAL REGION", ])+
 
 -   [Tidy data](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html)
 
--   [tidyr: Easily Tidy Data with \'spread()\' and \'gather()\' Functions](https://cran.r-project.org/web/packages/tidyr/tidyr.pdf)
+-   [tidyr: Easily Tidy Data with 'spread()' and 'gather()' Functions](https://cran.r-project.org/web/packages/tidyr/tidyr.pdf)

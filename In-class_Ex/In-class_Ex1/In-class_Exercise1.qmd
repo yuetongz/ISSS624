@@ -5,11 +5,21 @@ editor: visual
 
 ## Overview
 
-This xxx
+In this hands-on exercise, you will learn how to compute spatial weights using R. By the end to this hands-on exercise, you will be able to:
+
+-   import geospatial data using appropriate function(s) of **sf** package,
+
+-   import csv file using appropriate function of **readr** package,
+
+-   perform relational join using appropriate join function of **dplyr** package,
+
+-   compute spatial weights using appropriate functions of **spdep** package, and
+
+-   calculate spatially lagged variables using appropriate functions of **spdep** package.
 
 ## Getting Started
 
-The code chunk below will install an load tidyverse and sf packages.
+The code chunk below will install an load spdep, tmap, tidyverse and sf packages.
 
 ```{r}
 pacman::p_load(sf,tidyverse,spdep,tmap)
@@ -17,7 +27,7 @@ pacman::p_load(sf,tidyverse,spdep,tmap)
 
 ## Getting the Data Into R Environment
 
-Importing Geospatial Data
+Importing Geospatial Data.
 
 Importing polygon features
 
@@ -54,7 +64,7 @@ tmap_arrange(basemap, gdppc, asp=1, ncol=2)
 
 ## Computing Contiguity Spatial Weights
 
-Computing(QUEEN) contiguity based neighbours
+Computing(QUEEN) contiguity weight matrix
 
 ```{r}
 wm_q <- poly2nb(hunan, queen=TRUE)
@@ -100,6 +110,8 @@ longitude <- map_dbl(hunan$geometry, ~st_centroid(.x)[[1]])
 latitude <- map_dbl(hunan$geometry, ~st_centroid(.x)[[2]])
 
 ```
+
+Combine longitude and latitude
 
 ```{r}
 coords <- cbind(longitude, latitude)
@@ -151,11 +163,17 @@ wm_d62 <- dnearneigh(coords, 0, 62, longlat = TRUE)
 wm_d62
 ```
 
-Quiz: What is the meaning of "Average number of links: 3.681818" shown above? Answer:
+Quiz: What is the meaning of "Average number of links: 3.681818" shown above?
+
+Answer: On average, each area has 3.681818 neighbors.
+
+Display wm_d62
 
 ```{r}
 str(wm_d62)
 ```
+
+Dispaly the structure of the weight matrix
 
 ```{r}
 table(hunan$County, card(wm_d62))

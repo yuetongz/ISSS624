@@ -1,11 +1,29 @@
 ---
-title: "Hands_on Ex2"
+title: "Hands_on Ex 2"
 editor: visual
 ---
 
 ## Overview
 
-This is xxx:
+This hands-on exercise contains how to compute Global and Local Measure of Spatial Autocorrelation (GLSA) by using **spdep** package. Including:
+
+-   import geospatial data using appropriate function(s) of **sf** package,
+
+-   import csv file using appropriate function of **readr** package,
+
+-   perform relational join using appropriate join function of **dplyr** package,
+
+-   compute Global Spatial Autocorrelation (GSA) statistics by using appropriate functions of **spdep** package,
+
+    -   plot Moran scatterplot,
+
+    -   compute and plot spatial correlogram using appropriate function of **spdep** package.
+
+-   compute Local Indicator of Spatial Association (LISA) statistics for detecting clusters and outliers by using appropriate functions **spdep** package;
+
+-   compute Getis-Ord's Gi-statistics for detecting hot spot or/and cold spot area by using appropriate functions of **spdep** package; and
+
+-   to visualise the analysis output by using **tmap** package.
 
 ## Getting Started
 
@@ -17,10 +35,14 @@ pacman::p_load(sf, spdep, tmap, tidyverse)
 
 ## Import data
 
+Import Hunan shapefile
+
 ```{r}
 hunan <- st_read(dsn = "data/geospatial", 
                  layer = "Hunan")
 ```
+
+Inport Hunan_2012.csv
 
 ```{r}
 hunan2012 <- read_csv("data/aspatial/Hunan_2012.csv")
@@ -33,6 +55,8 @@ hunan <- left_join(hunan,hunan2012)
 ```
 
 Visualising Regional Development Indicator
+
+A basemap and a choropleth map
 
 ```{r}
 equal <- tm_shape(hunan) +
@@ -74,6 +98,8 @@ rswm_q <- nb2listw(wm_q,
 rswm_q
 ```
 
+Global Spatial Autocorrelation: Moran's I
+
 Maron's I test
 
 ```{r}
@@ -82,6 +108,10 @@ moran.test(hunan$GDPPC,
            zero.policy = TRUE, 
            na.action=na.omit)
 ```
+
+Question: What statistical conclusion can you draw from the output above?
+
+Answer: The Moran I is 0.300749970 which is bigger than 0 means clustered, observations tend to be similar.
 
 Computing Monte Carlo Moran's I
 
@@ -94,6 +124,8 @@ bperm= moran.mc(hunan$GDPPC,
                 na.action=na.omit)
 bperm
 ```
+
+Question: What statistical conclustion can you draw from the output above?
 
 Visualising Monte Carlo Moran's I
 
@@ -118,6 +150,17 @@ abline(v=0,
        col="red") 
 ```
 
+Question: What statistical observation can you draw from the output above?
+
+Challenge: Instead of using Base Graph to plot the values, plot the values by using ggplot2 package.
+
+```{r}
+#mc <- data.frame
+  
+#(data=mc, aes(x=res))+
+ # geom_bar()
+```
+
 Global Spatial Autocorrelation: Geary's
 
 Geary's C test
@@ -125,6 +168,8 @@ Geary's C test
 ```{r}
 geary.test(hunan$GDPPC, listw=rswm_q)
 ```
+
+Question: What statistical conclusion can you draw from the output above? Answer: Geary C \< 1, so Clustered, observations tend to be similar.
 
 Computing Monte Carlo Geary's C
 

@@ -396,7 +396,7 @@ LISAmap <- tm_shape(hunan.localMI) +
 tmap_arrange(gdppc, LISAmap, asp=1, ncol=2)
 ```
 
-Hot Spot and Cold Spot Area Analysis
+## Hot Spot and Cold Spot Area Analysis
 
 ```{r}
 longitude <- map_dbl(hunan$geometry, ~st_centroid(.x)[[1]])

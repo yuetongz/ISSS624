@@ -1,0 +1,149 @@
+---
+title: "In_class_Ex2"
+editor: visual
+---
+
+## Overview
+
+## Getting Started
+
+Setting Up working Environment
+
+```{r}
+pacman::p_load(sf, tidyverse, tmap, spdep, funModeling)
+```
+
+## Importing data
+
+-   geo_export
+
+-   nga_admbnda_adm2_osgof_20190417
+
+Importing water point geospatial data
+
+```{r}
+wp <- st_read(dsn = "geodata",
+              layer = "geo_export",
+              crs = 4326) %>%
+  filter(clean_coun == "Nigeria")
+```
+
+```{r}
+write_rds(wp, "geodata/wp_nga.rds")
+```
+
+Importing Nigeria LGA boundary data
+
+```{r}
+nga <- st_read(dsn = "geodata",
+               layer = "nga_admbnda_adm2_osgof_20190417",
+               crs = 4326)
+```
+
+## Data Wranging
+
+Recording NA values into string
+
+```{r}
+wp_nga <- read_rds("geodata/wp_nga.rds") %>%
+  mutate(status_cle = replace_na(status_cle, "Unknown"))
+```
+
+EDA
+
+```{r}
+freq(data=wp_nga, 
+     input = 'status_cle')
+```
+
+## Extracting Water Point Data
+
+Extracting functional water point
+
+```{r}
+wpt_functional <- wp_nga %>%
+  filter(status_cle %in%
+           c("Functional", 
+             "Functional but not in use",
+             "Functional but needs repair"))
+```
+
+```{r}
+freq(data=wpt_functional, 
+     input = 'status_cle')
+```
+
+Extracting non-functional water point
+
+```{r}
+wpt_nonfunctional <- wp_nga %>%
+  filter(status_cle %in%
+           c("Abandoned/Decommissioned", 
+             "Abandoned",
+             "Non-Functional",
+             "Non functional due to dry season",
+             "Non-Functional due to dry season"))
+```
+
+```{r}
+freq(data=wpt_nonfunctional, 
+     input = 'status_cle')
+```
+
+Extracting water point with Unknown class
+
+```{r}
+wpt_unknown <- wp_nga %>%
+  filter(status_cle == "Unknown")
+```
+
+## Performing Point-in-Polygon Count
+
+```{r}
+nga_wp <- nga %>% 
+  mutate(`total wpt` = lengths(
+    st_intersects(nga, wp_nga))) %>%
+  mutate(`wpt functional` = lengths(
+    st_intersects(nga, wpt_functional))) %>%
+  mutate(`wpt non-functional` = lengths(
+    st_intersects(nga, wpt_nonfunctional))) %>%
+  mutate(`wpt unknown` = lengths(
+    st_intersects(nga, wpt_unknown)))
+```
+
+## Saving the Analytical Data Table
+
+```{r}
+nga_wp <- nga_wp %>%
+  mutate(pct_functional = `wpt functional`/`total wpt`) %>%
+  mutate(`pct_non-functional` = `wpt non-functional`/`total wpt`) %>%
+  select(3:4, 9:10, 18:23)
+```
+
+Save the sf data table into rds format
+
+```{r}
+write_rds(nga_wp, "geodata/nga_wp.rds")
+```
+
+Visualising the spatial distribution of water points
+
+```{r}
+
+nga_wp <- read_rds("geodata/nga_wp.rds")
+total <- qtm(nga_wp, "total wpt")+
+  tm_layout(legend.height=0.25,
+            legend.width=0.35)
+wp_functional <- qtm(nga_wp, "wpt functional")+
+  tm_layout(legend.height=0.25,
+            legend.width=0.35)
+wp_nonfunctional <- qtm(nga_wp, "wpt non-functional")+
+  tm_layout(legend.height=0.25,
+            legend.width=0.35)
+unknown <- qtm(nga_wp, "wpt unknown")+
+  tm_layout(legend.height=0.25,
+            legend.width=0.35)
+
+tmap_arrange(total, wp_functional, wp_nonfunctional, unknown, asp=1, ncol=2)
+
+```

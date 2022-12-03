@@ -2,7 +2,7 @@
 title: "Take-home_Exercise1"
 editor: visual
 author: Zhao Yuetong
-date: 26/11/2022
+date: 11/26/2022
 ---
 
 # Geospatial Analytics for Social Good

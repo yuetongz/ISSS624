@@ -251,3 +251,103 @@ prob_T <- tm_shape(Osun) +
   tm_view(set.zoom.limits = c(8,14))
 prob_T
 ```
+
+## **Removing the Variables and Building Logistic Regression Model**
+
+```{r}
+model2 <- glm(status ~ distance_to_tertiary_road +
+               distance_to_city +
+               distance_to_town +
+               is_urban +
+               usage_capacity +
+               water_source_clean +
+               water_point_population +
+               local_population_1km,
+             data = Osun_wp_sf_clean,
+             family = binomial(link = 'logit'))
+blr_regress(model2)
+```
+
+```{r}
+blr_confusion_matrix(model2, cutoff = 0.5)
+```
+
+```{r}
+bw.fixed2 <- bw.ggwr(status ~ distance_to_tertiary_road +
+                     distance_to_city +
+                     distance_to_town +
+                     is_urban +
+                     usage_capacity +
+                     water_source_clean +
+                     water_point_population +
+                     local_population_1km,
+                   data = Osun_wp_sp,
+                   family = "binomial",
+                   approach = "AIC",
+                   kernel = "gaussian",
+                   adaptive = FALSE,
+                   longlat = FALSE)
+```
+
+```{r}
+gwlr.fixed2 <- ggwr.basic(status ~distance_to_tertiary_road +
+                      distance_to_city +
+                      distance_to_town +
+                      water_point_population +
+                      local_population_1km +
+                      is_urban +
+                      usage_capacity +
+                      water_source_clean,
+                    data=Osun_wp_sp,
+                    bw = bw.fixed2,
+                    family = "binomial",
+                    kernel = "gaussian",
+                    adaptive = FALSE,
+                    longlat = FALSE)
+```
+
+```{r}
+gwlr.fixed2
+```
+
+```{r}
+gwr.fixed2 <- as.data.frame(gwlr.fixed2$SDF)
+```
+
+```{r}
+gwr.fixed2 <- gwr.fixed2 %>%
+  mutate(most = ifelse(
+    gwr.fixed2$yhat >= 0.5, T, F))
+```
+
+```{r}
+gwr.fixed2$y <- as.factor(gwr.fixed2$y)
+gwr.fixed2$most <- as.factor(gwr.fixed2$most)
+CM2 <- confusionMatrix(data=gwr.fixed2$most, reference = gwr.fixed2$y, positive = "TRUE")
+CM2
+```
+
+```{r}
+gwr_sf.fixed2 <- cbind(Osun_wp_sf_selected, gwr.fixed2)
+```
+
+```{r}
+tmap_mode("view")
+```
+
+```{r}
+prob_T2 <- tm_shape(Osun) +
+  tm_polygons(alpha = 0.1) +
+tm_shape(gwr_sf.fixed2) +
+  tm_dots(col = "yhat",
+          border.col = "gray60",
+          border.lwd = 1) +
+  tm_view(set.zoom.limits = c(8,14))
+prob_T2
+```
+
+## Conclusion
+
+After Removing the two variables, there is no improvement in True Positive, and the True Negative improved a little. Therefore, using gwLR model can be used when focusing on the non-functional water point ratio.
+
+

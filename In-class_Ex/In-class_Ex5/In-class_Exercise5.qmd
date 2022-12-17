@@ -1,0 +1,253 @@
+---
+title: "In class Exercise5"
+editor: visual
+author: Zhao Yuetong
+---
+
+## Setting the scene
+
+To build explanatory model to discover factor affecting water point statues in Osun State, Nigeria,
+
+Study area: Orun State, Negeria
+
+Data sets:
+
+-   Osun.rds, contains LGAs boundaries of Osun State. It is in sf polygon data frame, and
+
+-   Osun_wp_sf.rds, contained water points within Osun State. It is in sf point data frame.
+
+## Model Varibales
+
+-   Dependent variable: Water points status(i.e. functional/non-functional)
+
+-   Independent variables:
+
+-   distance_to_primary_road.
+
+-   distance_to_secondary \_road
+
+-   distance_to_tertiary_road.
+
+-   distance_to_city
+
+-   distance_to_town
+
+-   water_point_population
+
+-   local_population_1km
+
+-   usage_capacity
+
+-   is_urban
+
+-   water_source_clean
+
+    ## Getting start
+
+-   Create In-class Exercise 5 folder
+
+-   Write a code chunk to load the following packages: sf, tidyverse, funModeling, blorr,corrplot, ggpubr,sf,spdep,GWmodel, tmap, skimr,caret
+
+    ```{r}
+    pacman::p_load(spdep, tmap, sf, blorr, caret, corrplot, ggpubr,  NbClust, GWmodel, tidyverse, funModeling, skimr,report)
+    ```
+
+## Data Import
+
+In this in-class exercise, two data sets will be used. They are:
+
+```{r}
+Osun <- read_rds("rds/Osun.rds")
+Osun_wp_sf <- read_rds("rds/Osun_wp_sf.rds")
+```
+
+```{r}
+Osun_wp_sf %>%
+  freq(input = 'status')
+```
+
+```{r}
+tmap_mode("view")
+tm_shape(Osun)+
+  tm_polygons(alpha = 0.4)+
+  tm_shape(Osun_wp_sf)+
+  tm_dots(col = "status",
+          alpha = 0.6)+
+  tm_view(set.zoom.limits = c(9,12))
+```
+
+## Exploratory Data Analysis
+
+### Summary Statics with skimr.
+
+```{r}
+Osun_wp_sf %>%
+  skim()
+```
+
+```{r}
+Osun_wp_sf_clean <- Osun_wp_sf %>%
+  filter_at(vars(status,
+                 distance_to_primary_road,
+                 distance_to_secondary_road,
+                 distance_to_tertiary_road,
+                 distance_to_city,
+                 distance_to_town,
+                 water_point_population,
+                 local_population_1km,
+                 usage_capacity,
+                 is_urban,
+                 water_source_clean),
+            all_vars(!is.na(.)))%>%
+  mutate(usage_capacity = as.factor(usage_capacity))
+```
+
+## Correlation Analysis
+
+```{r}
+Osun_wp <- Osun_wp_sf_clean %>%
+  select(c(7,35:39,42:43,46:47,57)) %>%
+  st_set_geometry(NULL)
+
+```
+
+```{r}
+cluster_vars.cor = cor(
+  Osun_wp[,2:7])
+corrplot.mixed(cluster_vars.cor,
+               lower = "ellipse",
+               upper = "number",
+               tl.pos = "lt",
+               diag = "l",
+               tl.col = "black")
+```
+
+## Building a Logistic Regression Models
+
+```{r}
+model <- glm(status ~ distance_to_primary_road +
+               distance_to_tertiary_road +
+               distance_to_city +
+               distance_to_town +
+               is_urban +
+               usage_capacity +
+               water_source_clean +
+               water_point_population +
+               local_population_1km,
+             data = Osun_wp_sf_clean,
+             family = binomial(link ='logit'))
+```
+
+Instead of using typical R report,
+
+```{r}
+blr_regress(model)
+```
+
+```{r}
+report(model)
+```
+
+```{r}
+blr_confusion_matrix(model, cutoff = 0.5)
+```
+
+```{r}
+Osun_wp_sp <- Osun_wp_sf_clean %>%
+  select(c(status,
+           distance_to_primary_road,
+           distance_to_secondary_road,
+           distance_to_tertiary_road,
+           distance_to_city,
+           distance_to_town,
+           water_point_population,
+           local_population_1km,
+           is_urban,
+           usage_capacity,
+           water_source_clean)) %>%
+  as_Spatial()
+Osun_wp_sp
+```
+
+```{r}
+bw.fixed <- bw.ggwr(status ~ distance_to_primary_road +
+                     distance_to_secondary_road +
+                     distance_to_tertiary_road +
+                     distance_to_city +
+                     distance_to_town +
+                     is_urban +
+                     usage_capacity +
+                     water_source_clean +
+                     water_point_population +
+                     local_population_1km,
+                   data = Osun_wp_sp,
+                   family = "binomial",
+                   approach = "AIC",
+                   kernel = "gaussian",
+                   adaptive = FALSE,
+                   longlat = FALSE)
+```
+
+```{r}
+bw.fixed
+```
+
+```{r}
+gwlr.fixed <- ggwr.basic(status ~
+                           distance_to_primary_road+
+                      distance_to_secondary_road+
+                      distance_to_tertiary_road+
+                      distance_to_town+
+                      distance_to_city+
+                      water_point_population+
+                      local_population_1km+
+                      is_urban+
+                      usage_capacity+
+                      water_source_clean,
+                    data= Osun_wp_sp,
+                    bw= bw.fixed,
+                    family = "binomial",
+                    kernel = "gaussian",
+                    adaptive = FALSE,
+                    longlat=FALSE)
+```
+
+```{r}
+gwr.fixed <- as.data.frame(gwlr.fixed$SDF)
+```
+
+```{r}
+gwr.fixed <- gwr.fixed %>%
+  mutate(most = ifelse(
+    gwr.fixed$yhat >= 0.5, T,F))
+```
+
+```{r}
+gwr.fixed$y <- as.factor(gwr.fixed$y)
+gwr.fixed$most <- as.factor(gwr.fixed$most)
+CM <- confusionMatrix(data=gwr.fixed$most, reference = gwr.fixed$y)
+CM
+```
+
+```{r}
+Osun_wp_sf_selected <- Osun_wp_sf_clean %>%
+  select(c(ADM2_EN, ADM2_PCODE,
+           ADM1_EN, ADM1_PCODE,
+           status))
+```
+
+```{r}
+gwr_sf.fixed <- cbind(Osun_wp_sf_selected, gwr.fixed)
+```
+
+```{r}
+tmap_mode("view")
+prob_T <- tm_shape(Osun) +
+  tm_polygons(alpha = 0.1) +
+  tm_shape(gwr_sf.fixed) +
+  tm_dots(col = "yhat",
+          border.col = "gray60",
+          border.lwd =1)+
+  tm_view(set.zoom.limits = c(8,14))
+prob_T
+```
